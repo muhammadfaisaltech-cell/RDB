@@ -12,7 +12,6 @@ jobs:
       - name: Configure Core RDP Settings
         shell: powershell
         run: |
-          # Enable Remote Desktop and disable Network Level Authentication (if needed)
           Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0 -Force
           Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name 'UserAuthentication' -Value 0 -Force
           Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name 'SecurityLayer' -Value 0 -Force
@@ -28,7 +27,7 @@ jobs:
           Add-Type -AssemblyName System.Security
 
           $charSet = @{
-            Upper   = [char[]](65..90)  
+            Upper   = [char[]](65..90)
             Lower   = [char[]](97..122)
             Number  = [char[]](48..57)
             Special = ([char[]](33..47) + [char[]](58..64) + [char[]](91..96) + [char[]](123..126))
@@ -66,7 +65,6 @@ jobs:
 
           $tsIP = $null
           $retries = 0
-
           while (-not $tsIP -and $retries -lt 10) {
             $tsIP = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
             Start-Sleep -Seconds 5
